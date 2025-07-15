@@ -1,0 +1,214 @@
+﻿#include "game.h"
+
+#include "SFML/Graphics.hpp"
+#include "ai/npc_manager.h"
+#include "gameplay/building_manager.h"
+#include "graphics/tilemap.h"
+#include "ressources/ressource_manager.h"
+#include "ui/button.h"
+#include "ui/button_factory.h"
+#include "ui/clickable.h"
+#include "ui/resource_ui.h"
+
+namespace game {
+namespace {
+sf::Clock clock;
+sf::RenderWindow window_;
+api::ui::Ressource_UI ressource_ui;
+
+auto tilemap_ptr_ = std::make_unique<TileMap>();
+api::ai::NpcManager npc_manager_;
+
+api::gameplay::BuildingManger building_manger;
+
+// UI Elements
+api::ui::ButtonFactory btn_factory;
+
+std::unique_ptr<api::ui::Button> btnBlue;
+std::unique_ptr<api::ui::Button> btnRed;
+std::unique_ptr<api::ui::Button> btnGreen;
+std::unique_ptr<api::ui::Button> btnExit;
+
+api::ai::NpcType npc_adding_type = api::ai::NpcType::kNone;
+
+ResourceManager ressource_manager_;
+
+sf::Font font("_assets/fonts/ANTQUAB.TTF");
+
+// Create a text
+sf::Text text(font, "Snap Regulation");
+
+void ChopEvent(int index, float quantity) {
+	std::cout << "chop event : " << index << "," << quantity << "\n";
+	if (quantity <= 0) {
+		const auto type = tilemap_ptr_->GetTile(index);
+		tilemap_ptr_->SetTile(index, TileMap::Tile::kBg);
+		switch (type) {
+			case TileMap::Tile::kEmpty:
+				std::cout << "Error not a resource" << std::endl;
+				break;
+			case TileMap::Tile::kTree:
+				ressource_ui.woods += 5;
+				break;
+			case TileMap::Tile::kRock:
+				ressource_ui.stones += 3;
+				break;
+			case TileMap::Tile::kFood:
+				ressource_ui.foods += 2;
+				break;
+			default:
+				std::cout << "Null" << std::endl;
+		}
+	}
+}
+
+void Setup() {
+	// Create the main window
+	window_.create(sf::VideoMode({1280, 800}), "SFML window");
+	text.setCharacterSize(50);
+	// text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::Red);
+
+	// text_ui=ressource_ui.TextWood(font,"Wood");
+	ressource_ui.Setup(font);
+	// text.setPosition();
+	tilemap_ptr_->Setup();
+	tilemap_ptr_->OnReleasedLeft = []() {
+		std::cout << "Clicked tilemap" << "\n";
+		//
+		switch (npc_adding_type) {
+			case api::ai::NpcType::kNone:
+				break;
+			case api::ai::NpcType::kBlueWood:
+				//Need amount of wood
+				if (ressource_ui.woods >= 10) {
+					ressource_ui.woods-=10;
+					//Woodcutter creation
+					npc_manager_.Add(
+						npc_adding_type,
+						TileMap::TilePos(sf::Mouse::getPosition(window_)),
+						tilemap_ptr_.get(), "", ressource_manager_);
+					//Woodcut Buiding creation
+					building_manger.CreateBuilding(
+						TileMap::TilePos(sf::Mouse::getPosition(window_)),
+						api::gameplay::BuildingManger::BuildingSprite::
+							kWoodCut);
+				}
+				break;
+			case api::ai::NpcType::kRedRock:
+				//Need amount of stone
+				if (ressource_ui.stones >= 12) {
+					//Miner creation
+					ressource_ui.stones-=12;
+					npc_manager_.Add(
+						npc_adding_type,
+						TileMap::TilePos(sf::Mouse::getPosition(window_)),
+						tilemap_ptr_.get(), "", ressource_manager_);
+
+					building_manger.CreateBuilding(
+						TileMap::TilePos(sf::Mouse::getPosition(window_)),
+						api::gameplay::BuildingManger::BuildingSprite::
+							kMinners);
+				}
+				break;
+			case api::ai::NpcType::kGreenFood:
+				//Need amount of food
+				if (ressource_ui.foods >= 5) {
+					ressource_ui.foods-=5;
+					//Havester creation
+					npc_manager_.Add(
+						npc_adding_type,
+						TileMap::TilePos(sf::Mouse::getPosition(window_)),
+						tilemap_ptr_.get(), "", ressource_manager_);
+					building_manger.CreateBuilding(
+						TileMap::TilePos(sf::Mouse::getPosition(window_)),
+						api::gameplay::BuildingManger::BuildingSprite::
+							kHarvest);
+				}
+				break;
+		}
+		npc_adding_type = api::ai::NpcType::kNone;
+	};
+
+	btnBlue = btn_factory.CreateButton(
+		sf::Vector2f(100.f, window_.getSize().y - 100.f), "Woodcut");
+	btnBlue->OnReleasedLeft = []() {
+		npc_adding_type = api::ai::NpcType::kBlueWood;
+	};
+
+	btnRed = btn_factory.CreateButton(
+		sf::Vector2f(200.f, window_.getSize().y - 100.f), "Minners");
+	btnRed->OnReleasedLeft = []() {
+		npc_adding_type = api::ai::NpcType::kRedRock;
+	};
+
+	btnGreen = btn_factory.CreateButton(
+		sf::Vector2f(300.f, window_.getSize().y - 100.f), "Harvest");
+	btnGreen->OnReleasedLeft = []() {
+		npc_adding_type = api::ai::NpcType::kGreenFood;
+	};
+
+	btnExit = btn_factory.CreateButton(
+		sf::Vector2f(window_.getSize().x - 100.f, 30.f), "Exit");
+	btnExit->OnReleasedLeft = []() { window_.close(); };
+
+	ressource_manager_.LoadResources(
+		api::resource::Resource::Type::kWood,
+		tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
+
+	ressource_manager_.LoadResources(
+		api::resource::Resource::Type::kFood,
+		tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
+
+	ressource_manager_.LoadResources(
+		api::resource::Resource::Type::kStone,
+		tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
+}
+}  // namespace
+
+void Loop() {
+	Setup();
+
+	// Start the game loop
+	while (window_.isOpen()) {
+		auto dt = clock.restart().asSeconds();
+
+		// Process events = Input frame
+		while (const std::optional event = window_.pollEvent()) {
+			// Close window: exit
+			if (event->is<sf::Event::Closed>()) {
+				window_.close();
+			}
+
+			bool buttonsWasClicked = false;
+			btnBlue->HandleEvent(event, buttonsWasClicked);
+			btnRed->HandleEvent(event, buttonsWasClicked);
+			btnGreen->HandleEvent(event, buttonsWasClicked);
+			btnExit->HandleEvent(event, buttonsWasClicked);
+
+			tilemap_ptr_->HandleEvent(event, buttonsWasClicked);
+		}
+
+		// GamePlay, physic frame
+		npc_manager_.Update(dt);
+
+		// Graphic frame
+		window_.clear();
+
+		tilemap_ptr_->Draw(window_);
+		building_manger.Draw(window_);
+		npc_manager_.Draw(window_);
+
+		btnBlue->Draw(window_);
+		btnRed->Draw(window_);
+		btnGreen->Draw(window_);
+		btnExit->Draw(window_);
+		window_.draw(text);
+		ressource_ui.Draw(window_);
+		// window_.draw(ressource_ui.TextWood(font,"Wood"));
+		// window_.draw(ressource_ui.TextStone(font,"Stone"));
+		// window_.draw(ressource_ui.TextFood(font,"Food"));
+		window_.display();
+	}
+}
+}  // namespace game
