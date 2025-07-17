@@ -8,9 +8,9 @@
 
 namespace api::ai {
 
-void NpcManager::Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap,std::string color,ResourceManager ressource_manager) {
+void NpcManager::Add(NpcType type, sf::Vector2f start_position, TileMap* tilemap,std::string color,ResourceManager ressource_manager, ui::Ressource_UI* ressource_ui) {
 	//isCreated=true;
-	CreateNpc(npcs_, type, start_position, tilemap,color,ressource_manager);
+	CreateNpc(npcs_, type, start_position, tilemap,color,ressource_manager, ressource_ui);
 }
 
 void NpcManager::Update(float dt) {

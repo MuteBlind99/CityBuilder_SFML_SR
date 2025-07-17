@@ -46,7 +46,8 @@ class NpcBehaviourTree {
 	sf::Vector2f start_position_;
 	std::vector<resource::Resource> ressources_;
 	resource::Resource current_ressource_;
-	ui::Ressource_UI ressource_ui;
+	ui::Ressource_UI* ressource_ui_;
+	sf::RenderWindow window_;
 
    public:
 	void SetStartPos(const sf::Vector2f& position) {
@@ -55,7 +56,8 @@ class NpcBehaviourTree {
 
 	void SetupBehaviourTree(motion::Motor* npc_motor, motion::Path* path,
 							TileMap* tilemap, std::string color,
-							std::vector<resource::Resource> resources);
+							std::vector<resource::Resource> resources,
+							ui::Ressource_UI* ressource_ui);
 	void Update(float dt);
 	bool isEating = false;
 };

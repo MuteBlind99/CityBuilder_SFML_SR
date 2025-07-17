@@ -10,7 +10,7 @@ using namespace api::motion;
 namespace api::ai{
 
     void Npc::Setup(std::string_view name, std::string_view filename,
-                    TileMap* tilemap,  std::string color,std::vector<resource::Resource> ressources) {
+                    TileMap* tilemap,  std::string color,std::vector<resource::Resource> ressources, ui::Ressource_UI* ressource_ui) {
         name_ = std::string(name);
 
 
@@ -39,7 +39,7 @@ namespace api::ai{
 
     	currentDirection_ = Direction::Down; // Direction par défaut
         bt_tree_->SetupBehaviourTree(motor_.get(), path_.get(), tilemap, color,
-									 ressources);
+									 ressources, ressource_ui);
 
         motor_->SetPosition({0, 0});
         motor_->SetSpeed(kMovingSpeed);

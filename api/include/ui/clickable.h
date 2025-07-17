@@ -15,6 +15,7 @@ private:
 	sf::IntRect zone_;
 	bool isHover_ = false;
 
+
 protected:
 	// Constructeur protected, la classe demande un heritage
 	Clickable() = default;

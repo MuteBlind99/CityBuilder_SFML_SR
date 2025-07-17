@@ -14,13 +14,20 @@
 
 namespace api::ui {
     class Button : public Clickable{
-        sf::Sprite sprite_;
+        sf::Sprite spriteButton_;
         sf::Sprite hoverSprite_;
         sf::Text label_;
+    	sf::Sprite spriteCost_;
+    	sf::Text labelCost_;
+    	bool onButton=false;
 
     public:
-        Button(sf::Vector2f pos, std::string_view label, const sf::Texture &t, const sf::Texture &hover_t, const sf::Font& font);
-        void Draw(sf::RenderWindow &window) const;
+        Button(sf::Vector2f pos, std::string_view label, const sf::Texture &t,
+			const sf::Texture &hover_t, const sf::Font &font);
+	 Button(sf::Vector2f pos, std::string_view label, const sf::Texture &t1,
+			const sf::Texture &t2, const sf::Texture &hover_t,
+			const sf::Font &font);
+	 void Draw(sf::RenderWindow &window) const;
     };
 
 }

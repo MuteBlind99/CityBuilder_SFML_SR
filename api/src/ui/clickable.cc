@@ -4,6 +4,8 @@
 
 #include "ui/clickable.h"
 
+#include "ui/button.h"
+
 namespace api::ui {
     void Clickable::HandleEvent(std::optional<sf::Event> evt, bool &wasClicked){
 
@@ -51,6 +53,7 @@ namespace api::ui {
 
                 if (OnHoverEnter) OnHoverEnter();
                 isHover_ = true;
+
             }
             if (!zone_.contains(mouseMove->position) && isHover_) {
                 if (OnHoverExit) OnHoverExit();

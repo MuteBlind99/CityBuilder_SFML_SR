@@ -21,7 +21,7 @@ inline void ChopEvent(int index, float quantity, const NpcType type,
 }
 inline void CreateNpc(std::vector<Npc>& npcs, const NpcType type,
 					  sf::Vector2f start_position, TileMap* tilemap,
-					  std::string& color, const ResourceManager& ressources) {
+					  std::string& color, const ResourceManager& ressources, ui::Ressource_UI* ressource_ui	) {
 	std::vector<int> vec_index;
 
 	std::cout << "Creating npc" << std::endl;
@@ -29,22 +29,25 @@ inline void CreateNpc(std::vector<Npc>& npcs, const NpcType type,
 		case NpcType::kBlueWood:
 			npcs.emplace_back();
 			// ressources.LoadRessources(Ressource::Type::kWood,vec_index,ChopEvent);
-			npcs.back().Setup("BLUE", "FarmerCyan.PNG", tilemap, "Cyan",
-							  ressources.GetResources(resource::Resource::Type::kWood)
-							  );
+			npcs.back().Setup(
+				"BLUE", "FarmerCyan.PNG", tilemap, "Cyan",
+				ressources.GetResources(resource::Resource::Type::kWood), ressource_ui);
 
 			break;
 		case NpcType::kRedRock:
 			npcs.emplace_back();
 			// ressources.LoadRessources(Ressource::Type::kStone,vec_index,ChopEvent);
-			npcs.back().Setup("RED", "FarmerRed.PNG", tilemap, "Red",
-							  ressources.GetResources(resource::Resource::Type::kStone));
+			npcs.back().Setup(
+				"RED", "FarmerRed.PNG", tilemap, "Red",
+				ressources.GetResources(resource::Resource::Type::kStone),
+				ressource_ui);
 			break;
 		case NpcType::kGreenFood:
 			npcs.emplace_back();
 			// ressources.LoadRessources(Ressource::Type::kFood,vec_index,ChopEvent);
-			npcs.back().Setup("GREEN", "FarmerLime.PNG", tilemap, "Lime",
-							  ressources.GetResources(resource::Resource::Type::kFood));
+			npcs.back().Setup(
+				"GREEN", "FarmerLime.PNG", tilemap, "Lime",
+				ressources.GetResources(resource::Resource::Type::kFood), ressource_ui);
 			break;
 		default:
 			std::cout << "Error: Npc type not found" << std::endl;

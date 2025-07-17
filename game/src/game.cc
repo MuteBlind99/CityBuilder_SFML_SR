@@ -87,7 +87,7 @@ void Setup() {
 					npc_manager_.Add(
 						npc_adding_type,
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
-						tilemap_ptr_.get(), "", ressource_manager_);
+						tilemap_ptr_.get(), "", ressource_manager_, &ressource_ui);
 					//Woodcut Buiding creation
 					building_manger.CreateBuilding(
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
@@ -103,7 +103,7 @@ void Setup() {
 					npc_manager_.Add(
 						npc_adding_type,
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
-						tilemap_ptr_.get(), "", ressource_manager_);
+						tilemap_ptr_.get(), "", ressource_manager_, &ressource_ui);
 
 					building_manger.CreateBuilding(
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
@@ -119,7 +119,7 @@ void Setup() {
 					npc_manager_.Add(
 						npc_adding_type,
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
-						tilemap_ptr_.get(), "", ressource_manager_);
+						tilemap_ptr_.get(), "", ressource_manager_, &ressource_ui);
 					building_manger.CreateBuilding(
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
 						api::gameplay::BuildingManger::BuildingSprite::
@@ -131,25 +131,25 @@ void Setup() {
 	};
 
 	btnBlue = btn_factory.CreateButton(
-		sf::Vector2f(100.f, window_.getSize().y - 100.f), "Woodcut");
+		sf::Vector2f(100.f, window_.getSize().y - 100.f), "Woodcut: 10x Woods");
 	btnBlue->OnReleasedLeft = []() {
 		npc_adding_type = api::ai::NpcType::kBlueWood;
 	};
 
 	btnRed = btn_factory.CreateButton(
-		sf::Vector2f(200.f, window_.getSize().y - 100.f), "Minners");
+		sf::Vector2f(400.f, window_.getSize().y - 100.f), "Minners: 10x Stones");
 	btnRed->OnReleasedLeft = []() {
 		npc_adding_type = api::ai::NpcType::kRedRock;
 	};
 
 	btnGreen = btn_factory.CreateButton(
-		sf::Vector2f(300.f, window_.getSize().y - 100.f), "Harvest");
+		sf::Vector2f(700.f, window_.getSize().y - 100.f), "Harvest: 10x Woods \n   10x Stones ");
 	btnGreen->OnReleasedLeft = []() {
 		npc_adding_type = api::ai::NpcType::kGreenFood;
 	};
 
 	btnExit = btn_factory.CreateButton(
-		sf::Vector2f(window_.getSize().x - 100.f, 30.f), "Exit");
+		sf::Vector2f(window_.getSize().x - 100.f, 50.f), "Exit");
 	btnExit->OnReleasedLeft = []() { window_.close(); };
 
 	ressource_manager_.LoadResources(

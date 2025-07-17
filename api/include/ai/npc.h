@@ -42,7 +42,8 @@ class Npc {
    public:
 	void Setup(std::string_view name, std::string_view filename,
 			   TileMap* tilemap, std::string color,
-			   std::vector<resource::Resource> ressources);
+			   std::vector<resource::Resource> ressources,
+			   ui::Ressource_UI* ressource_ui);
 	void Update(float dt);
 	void Draw(sf::RenderWindow& window);
 	void SetDirection();

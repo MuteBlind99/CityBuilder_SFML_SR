@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 
+#include "../../../game/include/game.h"
 #include "ai/bt_action.h"
 #include "ai/bt_selector.h"
 #include "ai/bt_sequence.h"
@@ -83,7 +84,7 @@ Status NpcBehaviourTree::Eat() {
 		isEating = true;
 		return Status::kRunning;
 	} else {
-		ressource_ui.foods -= 1;
+		ressource_ui_->foods -= 1;
 		isEating = false;
 		return Status::kSuccess;
 	}
@@ -127,9 +128,10 @@ Status NpcBehaviourTree::Idle() {
 
 void NpcBehaviourTree::SetupBehaviourTree(
 	motion::Motor* npc_motor, motion::Path* path, TileMap* tilemap,
-	std::string color, std::vector<resource::Resource> resources) {
+	std::string color, std::vector<resource::Resource> resources, ui::Ressource_UI* ressource_ui) {
 	std::cout << "Setup Behaviour Tree\n";
 
+	ressource_ui_ = ressource_ui;
 	hunger_ = 0;
 	npc_motor_ = npc_motor;
 	path_ = path;
