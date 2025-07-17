@@ -24,7 +24,7 @@ labelCost_(font) {
 		static_cast<int>(spriteButton_.getTexture().getSize().y*2)};
 	sf::Vector2i int_pos = {static_cast<int>(pos.x), static_cast<int>(pos.y)};
 	spriteButton_.setPosition(pos);
-	spriteButton_.setScale(sf::Vector2f(1.f, 2.f));
+	spriteButton_.setScale(sf::Vector2f(3.f, 3.f));
 	spriteCost_.setPosition({pos.x + spriteButton_.getTexture().getSize().x / 2.f,
 						pos.y + spriteButton_.getTexture().getSize().y / 2.f});
 	spriteCost_.setScale(sf::Vector2f(2.f, 2.f));
@@ -42,15 +42,15 @@ labelCost_(font) {
 	OnHoverEnter = [this]() {
 
 		onButton = true;
-		spriteButton_.setScale(sf::Vector2f(2.f, 2.f));
+		spriteButton_.setScale(sf::Vector2f(3.f, 3.f));
 		spriteButton_.setColor(sf::Color(0, 0, 0, 0));
-		hoverSprite_.setScale(sf::Vector2f(2.f, 2.f));
+		hoverSprite_.setScale(sf::Vector2f(3.f, 3.f));
 		hoverSprite_.setColor(sf::Color(100, 255, 100, 255));
 		label_.setFillColor(sf::Color::Black);
 	};
 	OnHoverExit = [this]() {
 		onButton = false;
-		spriteButton_.setScale(sf::Vector2f(1.f, 2.f));
+		spriteButton_.setScale(sf::Vector2f(3.f, 3.f));
 		spriteButton_.setColor(sf::Color(100, 255, 255, 255));
 		hoverSprite_.setScale(sf::Vector2f(2.f, 2.f));
 		hoverSprite_.setColor(sf::Color(0, 0, 0, 0));

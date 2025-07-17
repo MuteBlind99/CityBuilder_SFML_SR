@@ -21,12 +21,13 @@ class ButtonFactory {
 		kWoodBtn,
 		kMinerBtn,
 		kHarvestBtn,
+		kExitBtn,
 		kLength
 	};
 
 	std::array<std::string_view, static_cast<size_t>(Sprite::kLength)> files_ =
 		{"empty.png",	 "button_grey.png", "button_brown.png",
-		 "Button_WoodCutter.png", "Button_Miner.png", "Button_Harvester.png"};
+		 "Button_WoodCutter.png", "Button_Miner.png", "Button_Harvester.png","ExitBtn.PNG"};
 
 	sf::Font font;
 	core::experimental::AssetManager<sf::Texture, Sprite, "_assets/sprites">
@@ -57,7 +58,7 @@ class ButtonFactory {
 
 				texturesButton_.Get(Sprite::kBgBtn),textures_.Get(Sprite::kMinerBtn),
 				texturesButton_.Get(Sprite::kHoverBtn), font));
-		} else if (label == "Harvest: 10x Woods \n   10x Stones ") {
+		} else if (label == "Harvest: 5x Woods \n   5x Stones ") {
 			return std::move(std::make_unique<api::ui::Button>(
 				pos, label,
 
@@ -67,7 +68,7 @@ class ButtonFactory {
 			return std::move(std::make_unique<api::ui::Button>(
 				pos, label,
 
-				texturesButton_.Get(Sprite::kBgBtn), textures_.Get(Sprite::kHoverBtn),
+				texturesButton_.Get(Sprite::kExitBtn), textures_.Get(Sprite::kHoverBtn),
 				font));
 		}
 		// return std::move(std::make_unique<api::ui::Button>(

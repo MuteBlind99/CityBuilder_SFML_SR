@@ -97,9 +97,9 @@ void Setup() {
 				break;
 			case api::ai::NpcType::kRedRock:
 				//Need amount of stone
-				if (ressource_ui.stones >= 12) {
+				if (ressource_ui.stones >= 10) {
 					//Miner creation
-					ressource_ui.stones-=12;
+					ressource_ui.stones-=10;
 					npc_manager_.Add(
 						npc_adding_type,
 						TileMap::TilePos(sf::Mouse::getPosition(window_)),
@@ -154,15 +154,15 @@ void Setup() {
 	btnExit->OnReleasedLeft = []() { window_.close(); };
 
 	ressource_manager_.LoadResources(
-		api::resource::Resource::Type::kWood,
+		Resource::Type::kWood,
 		tilemap_ptr_->GetCollectibles(TileMap::Tile::kTree), ChopEvent);
 
 	ressource_manager_.LoadResources(
-		api::resource::Resource::Type::kFood,
+		Resource::Type::kFood,
 		tilemap_ptr_->GetCollectibles(TileMap::Tile::kFood), ChopEvent);
 
 	ressource_manager_.LoadResources(
-		api::resource::Resource::Type::kStone,
+		Resource::Type::kStone,
 		tilemap_ptr_->GetCollectibles(TileMap::Tile::kRock), ChopEvent);
 }
 }  // namespace
@@ -191,13 +191,13 @@ void Loop() {
 		}
 		// GamePlay, physic frame
 		npc_manager_.Update(dt);
+		//Game Over no food
 		if (ressource_ui.foods<=0) {
-			//Game Over no food
 			// Graphic frame
 			window_.clear();
 			btnExit->Draw(window_);
 			building_manger.Draw(window_);
-			//window_.close();
+
 		}
 		else {
 
@@ -216,9 +216,6 @@ void Loop() {
 			btnExit->Draw(window_);
 			window_.draw(text);
 			ressource_ui.Draw(window_);
-			// window_.draw(ressource_ui.TextWood(font,"Wood"));
-			// window_.draw(ressource_ui.TextStone(font,"Stone"));
-			// window_.draw(ressource_ui.TextFood(font,"Food"));
 			window_.display();
 		}
 	}
