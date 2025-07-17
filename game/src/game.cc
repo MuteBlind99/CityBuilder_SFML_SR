@@ -113,8 +113,9 @@ void Setup() {
 				break;
 			case api::ai::NpcType::kGreenFood:
 				//Need amount of food
-				if (ressource_ui.foods >= 5) {
-					ressource_ui.foods-=5;
+				if (ressource_ui.woods >= 5&& ressource_ui.stones>=5) {
+					ressource_ui.woods-=5;
+					ressource_ui.stones-=5;
 					//Havester creation
 					npc_manager_.Add(
 						npc_adding_type,
@@ -143,7 +144,7 @@ void Setup() {
 	};
 
 	btnGreen = btn_factory.CreateButton(
-		sf::Vector2f(700.f, window_.getSize().y - 100.f), "Harvest: 10x Woods \n   10x Stones ");
+		sf::Vector2f(700.f, window_.getSize().y - 100.f), "Harvest: 5x Woods \n   5x Stones ");
 	btnGreen->OnReleasedLeft = []() {
 		npc_adding_type = api::ai::NpcType::kGreenFood;
 	};
@@ -188,27 +189,38 @@ void Loop() {
 
 			tilemap_ptr_->HandleEvent(event, buttonsWasClicked);
 		}
-
 		// GamePlay, physic frame
 		npc_manager_.Update(dt);
+		if (ressource_ui.foods<=0) {
+			//Game Over no food
+			// Graphic frame
+			window_.clear();
+			btnExit->Draw(window_);
+			building_manger.Draw(window_);
+			//window_.close();
+		}
+		else {
 
-		// Graphic frame
-		window_.clear();
 
-		tilemap_ptr_->Draw(window_);
-		building_manger.Draw(window_);
-		npc_manager_.Draw(window_);
 
-		btnBlue->Draw(window_);
-		btnRed->Draw(window_);
-		btnGreen->Draw(window_);
-		btnExit->Draw(window_);
-		window_.draw(text);
-		ressource_ui.Draw(window_);
-		// window_.draw(ressource_ui.TextWood(font,"Wood"));
-		// window_.draw(ressource_ui.TextStone(font,"Stone"));
-		// window_.draw(ressource_ui.TextFood(font,"Food"));
-		window_.display();
+			// Graphic frame
+			window_.clear();
+
+			tilemap_ptr_->Draw(window_);
+			building_manger.Draw(window_);
+			npc_manager_.Draw(window_);
+
+			btnBlue->Draw(window_);
+			btnRed->Draw(window_);
+			btnGreen->Draw(window_);
+			btnExit->Draw(window_);
+			window_.draw(text);
+			ressource_ui.Draw(window_);
+			// window_.draw(ressource_ui.TextWood(font,"Wood"));
+			// window_.draw(ressource_ui.TextStone(font,"Stone"));
+			// window_.draw(ressource_ui.TextFood(font,"Food"));
+			window_.display();
+		}
 	}
 }
 }  // namespace game
