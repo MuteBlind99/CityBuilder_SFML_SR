@@ -13,6 +13,7 @@
 #include "motion/path.h"
 #include "ressources/ressource.h"
 #include "ui/resource_ui.h"
+#include <SFML/Audio.hpp>
 
 namespace api::ai {
 class NpcBehaviourTree {
@@ -46,8 +47,10 @@ class NpcBehaviourTree {
 	sf::Vector2f start_position_;
 	std::vector<resource::Resource> ressources_;
 	resource::Resource current_ressource_;
-	ui::Ressource_UI* ressource_ui_;
+	ui::Ressource_UI* ressource_ui_ = nullptr;
 	sf::RenderWindow window_;
+	sf::SoundBuffer buffer;
+	//sf::Sound sound_;
 
    public:
 	void SetStartPos(const sf::Vector2f& position) {

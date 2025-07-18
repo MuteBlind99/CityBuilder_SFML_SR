@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics.hpp"
 #include "ai/npc_manager.h"
+#include "audio/audio_manager.h"
 #include "gameplay/building_manager.h"
 #include "graphics/tilemap.h"
 #include "ressources/ressource_manager.h"
@@ -34,10 +35,13 @@ api::ai::NpcType npc_adding_type = api::ai::NpcType::kNone;
 ResourceManager ressource_manager_;
 
 sf::Font font("_assets/fonts/Pixel Digivolve.otf");
+sf::Music music_main("_assets/musics/La marche des gendarmes.wav");
+sf::Music music_game_over("_assets/musics/Spanish Flea.wav");
 
 // Create a text
 sf::Text text(font, "Snap Regulation");
 sf::Text text_game_over(font, "Starvation \n Game Over");
+
 
 void ChopEvent(int index, float quantity) {
 	std::cout << "chop event : " << index << "," << quantity << "\n";
@@ -66,12 +70,18 @@ void ChopEvent(int index, float quantity) {
 void Setup() {
 	// Create the main window
 	window_.create(sf::VideoMode({1280, 800}), "SFML window");
+	window_.setFramerateLimit(60);
 	text.setCharacterSize(50);
 	text_game_over.setCharacterSize(50);
 	// text.setStyle(sf::Text::Bold);
 	text.setFillColor(sf::Color::Red);
 	text_game_over.setFillColor(sf::Color::Red);
 	text_game_over.setPosition(sf::Vector2f(500, 400));
+	music_game_over.setLooping(true);
+	music_game_over.setVolume(25);
+	music_main.setLooping(true);
+	music_main.setVolume(25);
+	music_main.play();
 
 	// text_ui=ressource_ui.TextWood(font,"Wood");
 	ressource_ui.Setup(font);
@@ -117,8 +127,8 @@ void Setup() {
 				break;
 			case api::ai::NpcType::kGreenFood:
 				//Need amount of food
-				if (ressource_ui.woods >= 5&& ressource_ui.stones>=5) {
-					ressource_ui.foods-=5;
+				if (ressource_ui.woods >= 5 && ressource_ui.stones>=5) {
+					ressource_ui.woods-=5;
 					ressource_ui.stones-=5;
 					//Havester creation
 					npc_manager_.Add(
@@ -193,19 +203,31 @@ void Loop() {
 
 			tilemap_ptr_->HandleEvent(event, buttonsWasClicked);
 		}
-		// GamePlay, physic frame
-		npc_manager_.Update(dt);
+
 		//Game Over no food
 		if (ressource_ui.foods<=0) {
 			// Graphic frame
 			window_.clear();
 			btnExit->Draw(window_);
-			building_manger.Draw(window_);
+			//building_manger.Draw(window_);
 			ressource_ui.Draw(window_);
 			window_.draw(text_game_over);
+
+			if (music_game_over.getStatus() != sf::SoundSource::Status::Playing) {
+				music_main.stop();
+				music_game_over.play();
+			}
+
 			window_.display();
+
+			//sound_.sound_buffer_.loadFromFile("La marche des gendarmes.wav");
+			//sound_.SetSound(sound_.sound_buffer_);
+			//sound_.PlaySound(sound_.sound_buffer_);
 		}
 		else {
+			// GamePlay, physic frame
+			npc_manager_.Update(dt);
+
 			// Graphic frame
 			window_.clear();
 
@@ -219,6 +241,7 @@ void Loop() {
 			btnExit->Draw(window_);
 			window_.draw(text);
 			ressource_ui.Draw(window_);
+
 			window_.display();
 		}
 	}

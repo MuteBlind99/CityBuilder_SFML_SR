@@ -34,7 +34,7 @@ Status NpcBehaviourTree::CheckHunger() const {
 	// std::cout << "this ? = " << this << "\n";
 	// std::cout << "Am I hungry ? " << std::to_string(hunger_);
 
-	if (hunger_ >= 100) {
+	if (hunger_ >= 50) {
 		// std::cout << " : Yes, I need to find food\n";
 
 		if (!tilemap_) {
@@ -79,7 +79,7 @@ Status NpcBehaviourTree::Move() const {
 
 Status NpcBehaviourTree::Eat() {
 	// No failure, until we have food storage system
-	hunger_ -= kHungerRate * tick_dt;
+	hunger_ -= kHungerRate * tick_dt*2;
 	if (hunger_ > 0) {
 		isEating = true;
 		return Status::kRunning;
@@ -112,6 +112,10 @@ Status NpcBehaviourTree::PickRessource() {
 
 Status NpcBehaviourTree::GetRessource() {
 	if (current_ressource_.GetQty() <= 0) {
+		//buffer.loadFromFile("coin-recieved-230517.mp3");
+		//sf::Sound sound_(buffer);
+		//sound_.setVolume(50.f);
+		//sound_.play();
 		return Status::kSuccess;
 	}
 
