@@ -38,7 +38,7 @@ class ButtonFactory {
    public:
 	ButtonFactory() {
 		texturesButton_.Load(files_);
-		if (!font.openFromFile("_assets/fonts/ANTQUAB.TTF")) {
+		if (!font.openFromFile("_assets/fonts/Pixel Digivolve.otf")) {
 			std::cout << "Failed to load font" << std::endl;
 		}
 		textures_.Load(files_);

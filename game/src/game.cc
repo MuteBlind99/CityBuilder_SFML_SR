@@ -33,10 +33,11 @@ api::ai::NpcType npc_adding_type = api::ai::NpcType::kNone;
 
 ResourceManager ressource_manager_;
 
-sf::Font font("_assets/fonts/ANTQUAB.TTF");
+sf::Font font("_assets/fonts/Pixel Digivolve.otf");
 
 // Create a text
 sf::Text text(font, "Snap Regulation");
+sf::Text text_game_over(font, "Starvation \n Game Over");
 
 void ChopEvent(int index, float quantity) {
 	std::cout << "chop event : " << index << "," << quantity << "\n";
@@ -66,8 +67,11 @@ void Setup() {
 	// Create the main window
 	window_.create(sf::VideoMode({1280, 800}), "SFML window");
 	text.setCharacterSize(50);
+	text_game_over.setCharacterSize(50);
 	// text.setStyle(sf::Text::Bold);
 	text.setFillColor(sf::Color::Red);
+	text_game_over.setFillColor(sf::Color::Red);
+	text_game_over.setPosition(sf::Vector2f(500, 400));
 
 	// text_ui=ressource_ui.TextWood(font,"Wood");
 	ressource_ui.Setup(font);
@@ -114,7 +118,7 @@ void Setup() {
 			case api::ai::NpcType::kGreenFood:
 				//Need amount of food
 				if (ressource_ui.woods >= 5&& ressource_ui.stones>=5) {
-					ressource_ui.woods-=5;
+					ressource_ui.foods-=5;
 					ressource_ui.stones-=5;
 					//Havester creation
 					npc_manager_.Add(
@@ -197,12 +201,11 @@ void Loop() {
 			window_.clear();
 			btnExit->Draw(window_);
 			building_manger.Draw(window_);
-
+			ressource_ui.Draw(window_);
+			window_.draw(text_game_over);
+			window_.display();
 		}
 		else {
-
-
-
 			// Graphic frame
 			window_.clear();
 

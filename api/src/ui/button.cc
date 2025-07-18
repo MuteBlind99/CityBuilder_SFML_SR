@@ -11,7 +11,7 @@
 #include <iostream>
 
 namespace api::ui {
-
+//Exit Button creation
 Button::Button(sf::Vector2f pos, std::string_view label, const sf::Texture &t,
 const sf::Texture &hover_t, const sf::Font &font): Clickable(),
 spriteButton_(t),
@@ -51,16 +51,16 @@ labelCost_(font) {
 	OnHoverExit = [this]() {
 		onButton = false;
 		spriteButton_.setScale(sf::Vector2f(3.f, 3.f));
-		spriteButton_.setColor(sf::Color(100, 255, 255, 255));
+		spriteButton_.setColor(sf::Color(255, 255, 255, 255));
 		hoverSprite_.setScale(sf::Vector2f(2.f, 2.f));
 		hoverSprite_.setColor(sf::Color(0, 0, 0, 0));
 		label_.setFillColor(sf::Color::White);
 	};
 
-	spriteButton_.setColor(sf::Color(255, 255, 255, 255));
+	//spriteButton_.setColor(sf::Color(255, 255, 255, 255));
 	hoverSprite_.setColor(sf::Color(0, 0, 0, 0));
 }
-
+//Button creation
 Button::Button(const sf::Vector2f pos, std::string_view label,
 			   const sf::Texture &t1,const sf::Texture &t2, const sf::Texture &hover_t,
 			   const sf::Font &font)
